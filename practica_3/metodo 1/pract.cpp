@@ -3,14 +3,17 @@
 
 using namespace std;
 
-int conv(char);
+int conv(int, int);
+int imprimir(int*, int);
 
 
 int main(){
     ifstream texto;
-    char temp[256];
     int numtext = 0;
+    int i = 0;
+    int cont = 0;
     char nom[60] = "";
+    int caracter[256];
 
     cout << "Ingrese nombre del archivo: "; cin >> nom;
     cout << nom << endl;
@@ -21,20 +24,50 @@ int main(){
     else cout << "esta cerrado" << endl;
     
     while(texto.good()){
-        temp = texto.get();
-        if(texto.good())numtext = numtext*10 + (temp - '0');
-
-
+        char temp = texto.get();
+        caracter[i] = (temp - 0);
+        i ++;
+    }
+    
+    imprimir(caracter, i);
+    for(; cont < i; cont ++){
+        cout << caracter[cont] << endl;
 
     }
 
+    conv(caracter, i);
+
+    imprimir(caracter, i);
+    
     texto.close();
 
     return 0;
 }
 
-int conv(char texto){
+int conv(int cadena, int tam){
+    int i = 0;
+    float num = 0;
+    int div = 0;
+    int cont = 0;
+    for(; i < tam; i++){
+        while(div > 0){
+            num = (cadena[i]%2)/10;
+            cont ++;    
+        }
+        while(cont > 0){
+            num *= 10;
+            cont --;
+        }
+        cadena[i] = num;
+    }
 
+}
 
+void imprimir(int caracter, int i){
+    int cont = 0;
+    for(; cont < i; cont ++){
+        cout << caracter[cont] << endl;
+
+    }
 
 }
