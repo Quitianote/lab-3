@@ -3,8 +3,8 @@
 
 using namespace std;
 
-int conv(int, int);
-int imprimir(int*, int);
+void conv(int*, int);
+void imprimir(int*, int);
 
 
 int main(){
@@ -30,10 +30,6 @@ int main(){
     }
     
     imprimir(caracter, i);
-    for(; cont < i; cont ++){
-        cout << caracter[cont] << endl;
-
-    }
 
     conv(caracter, i);
 
@@ -44,26 +40,35 @@ int main(){
     return 0;
 }
 
-int conv(int cadena, int tam){
+void conv(int cadena[], int tam){
     int i = 0;
     float num = 0;
-    int div = 0;
+    float resi = 0;
     int cont = 0;
+    int let = 0;
+    int divi = 0;
     for(; i < tam; i++){
-        while(div > 0){
-            num = (cadena[i]%2)/10;
-            cont ++;    
+        let = cadena[i];
+        divi = let/2;
+        while(divi != (1/2)){
+            divi = let/2;
+            resi = float(let%2);
+            num = (num/float(10)) + resi/float(10);
+            let /= 2;
+            cont ++;
         }
         while(cont > 0){
             num *= 10;
             cont --;
         }
         cadena[i] = num;
+        cont = 0;
+        num = 0;
     }
 
 }
 
-void imprimir(int caracter, int i){
+void imprimir(int caracter[], int i){
     int cont = 0;
     for(; cont < i; cont ++){
         cout << caracter[cont] << endl;
