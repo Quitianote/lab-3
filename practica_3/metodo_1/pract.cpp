@@ -6,6 +6,9 @@ using namespace std;
 
 void conv(int*, int, string*);
 void imprimir(int*, int);
+void codi1(string* , int, int);
+void codi2(string* , int, int);
+void cambit(string*, int);
 
 
 int main(){
@@ -15,19 +18,17 @@ int main(){
     int i = 0;
     int n = 0;
     int cont = 0;
+    int codi = 0;
     char nom[60] = "";
     char bin[60] = "";
     int caracter[256];
     string escri[256];
 
     cout << "Ingrese nombre del archivo: "; cin >> nom;
-    cout << nom << endl;
     cout << "Ingrese nombre del archivo binario: "; cin >> bin;
-    cout << bin << endl;
     cout << "Ingrese semilla: "; cin >> n;
+    cout << "Ingrese metodo de codificacion: "; cin >> codi;
     
-
-
     texto.open(nom);
     binario.open(bin, ofstream::binary);
 
@@ -43,10 +44,10 @@ int main(){
     }
     
     imprimir(caracter, i);
-
     conv(caracter, i, escri);
-
     imprimir(caracter, i);
+
+    if(codi == 1)codi1(escri, n, i);
 
     for(; cont < i; cont ++){
         binario << escri[cont];
@@ -68,6 +69,7 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
     int i = 0;
     int n = 0;
     string str;
+
     for(; i < tam; i++){
         let = cadena[i];
         divi = let/2;
@@ -106,10 +108,51 @@ void imprimir(int caracter[], int i){
 
 }
 
+void codi1(string escri[], int n, int tam){
+    int i = 0;
+    int dif = 0;
+    int let = 0;
+    int cont1 = 0;
+    int con0 = 0;
+    if(n > 8){
+        dif = n-8;
+    }
+    for(; i < tam; i ++){//entrando a byte
+        if(i == 8){
+            i = n - 8;
+        }
+        for(; let < n; let ++){//entrando a bit
+            /*if(let == 8 && n < 8){
+                
+            }*/
+            /*else*/ if(let + 1 == n){ 
+                if(i == 0){
+                    cambit(escri, n);
+                }
+                break;
+            }
+        }
+        break;
+    }    
+}
+
+
+void codi2(string escri[], int n){
 
 
 
 
+}
 
+
+void cambit(string escri[], int n){
+    int i = 0;
+    int bit = 0;
+    for(; i < n; i ++){
+        bit = escri[0][i];
+        if(bit == '1')escri[0][i] = '0';
+        else escri[0][i] = '1';
+    }
+}
 
 
