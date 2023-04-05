@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -8,7 +8,7 @@ void conv(int*, int, string*);
 void imprimir(int*, int);
 void codi1(string* , int, int);
 void codi2(string* , int, int);
-void cambit(string*, int);
+void cambit1(string*, int);
 
 
 int main(){
@@ -47,7 +47,7 @@ int main(){
     conv(caracter, i, escri);
     imprimir(caracter, i);
 
-    if(codi == 1)codi1(escri, n, i);
+    //if(codi == 1)codi1(escri, n, i);
 
     for(; cont < i; cont ++){
         binario << escri[cont];
@@ -69,6 +69,7 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
     int i = 0;
     int n = 0;
     string str;
+    stringstream ss;
 
     for(; i < tam; i++){
         let = cadena[i];
@@ -86,15 +87,18 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             cont --;
         }
         str = to_string(int(num));
+        ss << int(num);
+        str = ss.str();
         while(cont1 < 8){
-            str = "0" + str;
+            str.insert(0, "0");//inserto en la primera posicion el caracter "0"
             cont1 ++;
         }
-        escri[i] = str;
+        escri[0] = str.insert(8*i, str);
         cadena[i] = num;
         cont = 0;
         cont1= 0;
         num = 0;
+        ss.str("");//vaciando ss
     }
 
 }
@@ -108,12 +112,28 @@ void imprimir(int caracter[], int i){
 
 }
 
+void arrstr(string str[], int tam){//convirtiendo arreglo en un string
+    int i = 0;
+    int let = 0;
+    int pos = 1;
+    string cad[0] = str[0];//copiando arreglo
+    for(; i < tam; i ++){
+        for(; let < 8; let ++){
+            str[i][let] = str[i].insert(pos,cad[0][let]);
+            
+        }
+
+
+    }
+}
+
 void codi1(string escri[], int n, int tam){
     int i = 0;
     int dif = 0;
     int let = 0;
     int cont1 = 0;
     int con0 = 0;
+    char temp[256] = "";
     if(n > 8){
         dif = n-8;
     }
@@ -121,21 +141,50 @@ void codi1(string escri[], int n, int tam){
         if(i == 8){
             i = n - 8;
         }
-        for(; let < n; let ++){//entrando a bit
-            /*if(let == 8 && n < 8){
-                
-            }*/
-            /*else*/ if(let + 1 == n){ 
-                if(i == 0){
-                    cambit(escri, n);
-                }
-                break;
+        for(; let < 8; let ++){//entrando a bit
+            if(i == 0){//primer cambio de bit
+                cambit1(escri, n);
+                continue;
+                //break;
             }
+            if(let + 1 == n){
+
+
+            }
+            temp[let] = escri[i][let];
+
+
+
         }
+        
         break;
     }    
 }
 
+void cambit1(string escri[], int n){//primer cambio de bit codi1    
+
+    int i = 0;
+    int bit = 0;
+    for(; i < n; i ++){
+        bit = escri[0][i];
+        if(bit == '1')escri[0][i] = '0';
+        else escri[0][i] = '1';
+    }
+}
+
+void codi1cam(char cad[], int tam){
+    int i = 0;
+    int cont0 = 0;
+    int cont1 = 0;
+
+
+    for(; i < tam; i ++){
+        if(cad[i] == '0')cont0 ++;
+        else cont1 ++;
+    }
+    if(cont1 == cont)
+
+}
 
 void codi2(string escri[], int n){
 
@@ -145,14 +194,6 @@ void codi2(string escri[], int n){
 }
 
 
-void cambit(string escri[], int n){
-    int i = 0;
-    int bit = 0;
-    for(; i < n; i ++){
-        bit = escri[0][i];
-        if(bit == '1')escri[0][i] = '0';
-        else escri[0][i] = '1';
-    }
-}
+
 
 
