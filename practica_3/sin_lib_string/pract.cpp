@@ -40,10 +40,12 @@ int main(){
     
     while(texto.good()){//leer texto y pasar a entero
         char temp = texto.get();
-        caracter[i] = (temp - 0);
-        i ++;
+        if((temp - 0) != (-1)){
+            caracter[i] = (temp - 0);
+            i ++;
+        }
+
     }
-    
     imprimir(caracter, i);
     conv(caracter, i, escri);
     imprimir(caracter, i);
@@ -100,8 +102,8 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
         cont1= 0;
         num = 0;
         ss.str("");//vaciando ss
+        cout << escri[0] << " escri creandose" << endl;
     }
-    cout << escri[0] << " escri esta aca funcion de binario" << endl;
 }
 
 void imprimir(int caracter[], int i){
@@ -138,20 +140,21 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
     int cont1 = 0;
     int con0 = 0;
     char temp[256] = "";
+    cout << "tamaño " << tam << endl;
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
-        if(i == 0){//primer cambio de bit
+        if(i == 0){//primer cambio de semilla
             cambit1(escri, n);
             continue;
         }
-        else if((i + 1) == n){//verificar si let + 1 es igual a la semilla, ya que si comparo let == n, lo estaria contando a let desde 1, no desde 0
+        else if(i == semi){//verificar si i es igual a la semilla
             codi1cam(escri, tam, i, i + n);//codificando la semilla n
-            n = n + semi;
+            semi += n;
             if(n > tam*8){
                 n = (tam*8) - n;
             }
             cout << escri[0] << " escri estuvo por codificacion1" << endl;
         }
-        cout << "i: " << i << endl;
+        cout << "i: " << i  << " n: " << n << endl;
     }
 }   
 
@@ -176,24 +179,15 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
     int cont1 = 0;
     cout << cad[0] << " escri estuvo por codificacion 2" << endl;
     cout << ini << " inicio " << fin << " fin " << endl;
-    for(; ini <= fin; ini ++){
+    for(; ini < fin; ini ++){//contando 0 y 1
         if(cad[0][ini] == '0')cont0 ++;
         else cont1 ++;
     }
     i = 0;
     ini = inicop;
-    for(cont1 == cont0; ini <= fin; ini ++){
-        switch(cad[0][ini]){
-            case '1':
-                cad[0][ini] = '0';
-                break;
-            case '0':
-                cad[0][ini] = '1';
-                break;  
-        }
-    }
-    for(cont0 > cont1; ini <= fin; ini ++){
-        if(cont%2 == 0){
+    cout << cont0 << " contador0 " << cont1 << " contador1 " << endl;
+    if(cont1 == cont0){//primera condicion
+        for(; ini <= fin; ini ++){
             switch(cad[0][ini]){
                 case '1':
                     cad[0][ini] = '0';
@@ -203,18 +197,35 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
                     break;  
             }
         }
-        cont ++;
     }
-    for(cont1 > cont0; ini <= fin; ini ++){
-        if(cont%3 == 0){
-            switch(cad[0][ini]){
-                case '1':
-                    cad[0][ini] = '0';
-                    break;
-                case '0':
-                    cad[0][ini] = '1';
-                    break;  
-            } 
+    cout << cad[0] << " escri estuvo por codificacion pero analizando contadores" << endl;
+    if(cont0 > cont1){//segunda condicion
+        for(; ini <= fin; ini ++){
+            if(cont%2 == 0){
+                switch(cad[0][ini]){
+                    case '1':
+                        cad[0][ini] = '0';
+                        break;
+                    case '0':
+                        cad[0][ini] = '1';
+                        break;  
+                }
+            }
+            cont ++;
+        }
+    }
+    if(cont1 > cont0){//tercera condicion
+        for(; ini <= fin; ini ++){
+            if(cont%3 == 0){
+                switch(cad[0][ini]){
+                    case '1':
+                        cad[0][ini] = '0';
+                        break;
+                    case '0':
+                        cad[0][ini] = '1';
+                        break;  
+                } 
+            }
         }
     }
     cout << cad[0] << " escri estuvo por codificacion 3" << endl;
