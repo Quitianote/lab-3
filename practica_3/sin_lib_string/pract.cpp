@@ -187,7 +187,7 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
     ini = inicop;
     cout << cont0 << " contador0 " << cont1 << " contador1 " << endl;
     if(cont1 == cont0){//primera condicion
-        for(; ini <= fin; ini ++){
+        for(; ini < fin; ini ++){
             switch(cad[0][ini]){
                 case '1':
                     cad[0][ini] = '0';
@@ -200,7 +200,7 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
     }
     cout << cad[0] << " escri estuvo por codificacion pero analizando contadores" << endl;
     if(cont0 > cont1){//segunda condicion
-        for(; ini <= fin; ini ++){
+        for(; ini < fin; ini ++){
             if(cont%2 == 0){
                 switch(cad[0][ini]){
                     case '1':
@@ -214,8 +214,9 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
             cont ++;
         }
     }
+    cout << "contador: " << cont << endl;
     if(cont1 > cont0){//tercera condicion
-        for(; ini <= fin; ini ++){
+        for(; ini < fin; ini ++){
             if(cont%3 == 0){
                 switch(cad[0][ini]){
                     case '1':
@@ -226,6 +227,7 @@ void codi1cam(string cad[], int tam, int ini, int fin){//codificacion 1
                         break;  
                 } 
             }
+            cont ++;
         }
     }
     cout << cad[0] << " escri estuvo por codificacion 3" << endl;
