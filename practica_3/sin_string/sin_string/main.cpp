@@ -50,9 +50,8 @@ int main(){
     conv(caracter, i, escri);
     imprimir(caracter, i);
 
-    if(codi == 1){
-        codi1(escri, n, i);
-    }
+    if(codi == 1)codi1(escri, n, i);
+    //else codi2(escri, n, i);
 
     binario << escri[0];//escribir en archivo bin
 
@@ -103,7 +102,7 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             cont1 ++;
         }
         escri[0] = escri[0].insert(8*i, str);
-        cadena[i] = num;
+        //cadena[i] = num;
         cont = 0;
         num = 0;
         ss.str("");//vaciando ss
@@ -140,7 +139,6 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
     int i = 0;
     int semi = n;//copia de semilla
     int noriginal = n;//copia de valor de semilla original
-    int pos = 0;//posicion del anterior numero de bits
     string cop[1] = {escri[0]};//copia de string original
     cout << "valor completo: " << escri[0] << endl;
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
@@ -240,7 +238,7 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     cout << "valor 4: " << cad[0] << endl;
 }
 /*
-void codi2(string escri[], int n){
+void codi2(string escri[], int n, tam){
 
 
 
