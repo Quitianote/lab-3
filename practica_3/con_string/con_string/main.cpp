@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
 
 using namespace std;
@@ -50,10 +49,11 @@ int main(){
     conv(caracter, i, escri);
 
     cout << "valor inicial: " << escri[0] << endl;
+    cout << "i: " << i << endl;
 
     if(codi == 1)codi1(escri, n, i);
     else codi2(escri, n, i);
-
+    cout << "i: " << i << endl;
     binario << escri[0];//escribir en archivo bin
 
     cout << "valor final: " << escri[0] << endl;
@@ -65,14 +65,13 @@ int main(){
 }
 
 void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
-    double num = 0;
     float resi = 0;
     int cont = 0;
     int cont1 = 0;
     int let = 0;
     int divi = 0;
     int i = 0;
-    string str;
+    string str = "";
 
     for(; i < tam; i++){
         let = cadena[i];
@@ -80,27 +79,23 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
 
         while(divi != (1/2)){//mientras la division sea diferente a la ultima division que se hace, o sea la ultima division que se hace es dividir por 1
             divi = let/2;
-            resi = float(let%2);
-            num = (num/float(10)) + resi/float(10);
+            resi = let%2;
+            if(resi == 1)str = '1' + str;
+            else str = '0' + str;
             let /= 2;
-            cont ++;
+
         }
         cont1 = cont;
 
-        while(cont > 0){//pasando de decimal a binario
-            num *= 10;
-            cont --;
-        }
-        str = to_string(int(num));//pasar de float a int(para quitar los decimales), luego de int a string
-
-        while(cont1 < 8){
+        while(str.length() < 8){
             str = '0' + str;//inserto en la primera posicion el caracter "0"
             cont1 ++;
         }
+        cout << "str: " << str << endl;
         cout << "antes: " << escri[0] << endl;
         escri[0] = escri[0] + str;
         cont = 0;
-        num = 0;
+        str = "";
         cout << "despues: " << escri[0] << endl;
     }
 }
@@ -110,6 +105,7 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
     int semi = n;//copia de semilla
     int noriginal = n;//copia de valor de semilla original
     string cop[1] = {escri[0]};//copia de string original
+
 
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
         if(i == 0){//primer cambio de semilla
@@ -129,41 +125,42 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
 
 void cambit1(string escri[], int n){//primer cambio de bit codi1
     int i = 0;
-    int bit = 0;
+    string str = escri[0].substr(0, n);//creando subcadena
+    escri[0].erase(0, n);//eliminando la subcadena que cree
 
     for(; i < n; i ++){
-        bit = escri[0][i];
-        if(bit == '1')escri[0][i] = '0';
-        else escri[0][i] = '1';
+        if(str[i] == '1')str[i] = '0';//mirando si es 1 el bit
+        else str[i] = '1';
     }
+    escri[0].insert(0,str);
 }
 
 void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codificacion 1
     int inicop = ini;//copia de valor inicial
-    int fincop = fin;//copia de valor final
     int cont = 1;
     int cont0 = 0;
     int cont1 = 0;
-
+    string strcop = cop[0].substr(ini, semi);//copia con la subcadena del string que voy a contar
+    string str = cad[0].substr(ini, semi);//string a cambiar
+    cad[0].erase(ini, semi);
     ini -= semi;//posicion de la semilla que se va a contar
-    fin -= semi;//posicion final de la semilla que se va a contar
+    ini = 0;//dandole al valor inicial su valor inicial original
+    fin = semi;//dandole al valor final su valor final original
 
     for(; ini < fin; ini ++){//contando 0 y 1
-        if(cop[0][ini] == '0')cont0 ++;
+        if(strcop[ini] == '0')cont0 ++;
         else cont1 ++;
     }
-
-    ini = inicop;//dandole al valor inicial su valor inicial original
-    fin = fincop;//dandole al valor final su valor final original
+    ini = 0;
 
     if(cont1 == cont0){//primera condicion
         for(; ini < fin; ini ++){
-            switch(cad[0][ini]){
+            switch(str[ini]){
                 case '1':
-                    cad[0][ini] = '0';
+                    str[ini] = '0';
                     break;
                 case '0':
-                    cad[0][ini] = '1';
+                    str[ini] = '1';
                     break;
             }
         }
@@ -172,12 +169,12 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     if(cont0 > cont1){//segunda condicion
         for(; ini < fin; ini ++){
             if(cont%2 == 0){
-                switch(cad[0][ini]){
+                switch(str[ini]){
                     case '1':
-                        cad[0][ini] = '0';
+                        str[ini] = '0';
                         break;
                     case '0':
-                        cad[0][ini] = '1';
+                        str[ini] = '1';
                         break;
                 }
             }
@@ -188,18 +185,19 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     if(cont1 > cont0){//tercera condicion
         for(; ini < fin; ini ++){
             if(cont%3 == 0){
-                switch(cad[0][ini]){
+                switch(str[ini]){
                     case '1':
-                        cad[0][ini] = '0';
+                        str[ini] = '0';
                         break;
                     case '0':
-                        cad[0][ini] = '1';
+                        str[ini] = '1';
                         break;
                 }
             }
             cont ++;
         }
     }
+    cad[0].insert(inicop,str);
 }
 
 void codi2(string escri[], int n, int tam){
@@ -220,6 +218,9 @@ void codi2(string escri[], int n, int tam){
 
 void codi2cam(string cad[], string cop[], int ini, int fin){
     cad[0][ini] = cop[0][fin - 1];//la posicion final darle la posicion inicial
+    string strcop = cop[0].substr(ini, semi);
+    string str = cad[0].substr(ini, semi);//string a cambiar
+    cad[0].erase(ini, semi);
 
     for(; ini < fin - 1; ini ++){//intercambiar posiciones
         cad[0][ini+1] = cop[0][ini];
