@@ -5,7 +5,6 @@
 using namespace std;
 
 void conv(int*, int, string*);
-void imprimir(int*, int);
 void codi1(string* , int, int);
 void codi1cam(string* , string*, int, int, int);
 void codi2(string* , int, int);
@@ -33,10 +32,10 @@ int main(){
     texto.open(nom);
     binario.open(bin, ofstream::binary);
 
-    if(texto.is_open())cout << "esta abierto" << endl;
-    else cout << "esta cerrado" << endl;
-    if(binario.is_open())cout << "esta abierto binario" << endl;
-    else cout << "esta cerrado binario" << endl;
+    if(texto.is_open())cout << "Esta abierto texto" << endl;
+    else cout << "Esta cerrado texto" << endl;
+    if(binario.is_open())cout << "Esta abierto binario" << endl;
+    else cout << "Esta cerrado binario" << endl;
 
     while(texto.good()){//leer texto y pasar a entero
         char temp = texto.get();
@@ -47,9 +46,7 @@ int main(){
         }
 
     }
-    imprimir(caracter, i);
     conv(caracter, i, escri);
-    imprimir(caracter, i);
 
     if(codi == 1)codi1(escri, n, i);
     else codi2(escri, n, i);
