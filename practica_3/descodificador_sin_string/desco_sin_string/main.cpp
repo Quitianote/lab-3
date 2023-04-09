@@ -7,9 +7,9 @@ using namespace std;
 
 void conv(string*, int*, int);
 void codi1(string* , int, int);
-void codi1cam(string* , string*, int, int, int);
-void codi2(string* , int, int);
-void codi2cam(string* , string*, int, int);
+void codi1cam(string*, string*, int, int, int);
+void codi2(string*, int , int);
+void codi2cam(string*, string*, int, int);
 void cambit1(string*, int);
 
 int main(){
@@ -27,7 +27,7 @@ int main(){
     cout << "Ingrese nombre del archivo: "; cin >> nom;
     cout << "Ingrese nombre del archivo binario: "; cin >> bin;
     cout << "Ingrese semilla: "; cin >> n;
-    cout << "Ingrese metodo de codificacion: "; cin >> codi;
+    cout << "Ingrese metodo de decodificacion: "; cin >> codi;
 
     while(codi != 1 && codi != 2){
         cout << "//ERROR//::Ingrese metodo de codificacion 1 o 2: "; cin >> codi;
@@ -40,19 +40,18 @@ int main(){
     if(binario.is_open())cout << "Esta abierto binario" << endl;
     else cout << "Esta cerrado binario" << endl;
 
-    while(binario.read(&byte, 1)) {
+    while(binario.read(&byte, 1)) {//leyendo bits
         cade[0] = cade[0].insert(cont, 1, byte);
         cont ++;
-        if(cont%8 == 0)contdef ++;
+        if(cont%8 == 0)contdef ++;//definiendo tamaño
     }
-    cont /= 2;
+    if(codi == 1)codi1(cade, n, contdef);//decodificacion 1
+    else codi2(cade, n, contdef);
 
-    cout << cade[0] << endl;
-
-    codi1(cade, n, contdef);
     int numeros[contdef];//arreglo con numeros
-    cout << cade[0] << endl;
+
     conv(cade, numeros, contdef);
+
     for(int i = 0; i < contdef; i ++){
         cout << numeros[i] << endl;
     }
@@ -217,3 +216,35 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
         }
     }
 }
+
+void codi2(string escri[], int n, int tam){
+    int i = 0;
+    int semi = n;//copia de semilla
+    string cop[1] = {escri[0]};//copia de string original
+
+    for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
+        if(i == semi || i == 0){//verificando si i es igual a la semilla
+            if(i + n > tam*8){//mirando si i + n(o sea la variable final) se pasa del rango, se multiplica por 8 a tam, porque son 8 bits
+                n = tam*8 - i;
+            }
+            codi2cam(escri, cop, i, i + n);//codificando la semilla n
+            if(i != 0)semi += n;
+        }
+    }
+}
+
+void codi2cam(string cad[], string cop[], int ini, int fin){
+    cad[0][fin - 1] = cop[0][ini];//la posicion inicial darle la posicion final
+
+    for(; ini < fin - 1; ini ++){//intercambiar posiciones
+        cad[0][ini] = cop[0][ini + 1];
+    }
+}
+
+
+
+
+
+
+
+
