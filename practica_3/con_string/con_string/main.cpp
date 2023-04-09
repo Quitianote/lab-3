@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ int main(){
     char nom[60] = "";
     char bin[60] = "";
     int caracter[256];
-    string escri[1];
+    string escri[1] = {""};
 
     cout << "Ingrese nombre del archivo: "; cin >> nom;
     cout << "Ingrese nombre del archivo binario: "; cin >> bin;
@@ -48,10 +49,14 @@ int main(){
     }
     conv(caracter, i, escri);
 
+    cout << "valor inicial: " << escri[0] << endl;
+
     if(codi == 1)codi1(escri, n, i);
     else codi2(escri, n, i);
 
     binario << escri[0];//escribir en archivo bin
+
+    cout << "valor final: " << escri[0] << endl;
 
     texto.close();
     binario.close();
@@ -68,7 +73,6 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
     int divi = 0;
     int i = 0;
     string str;
-    stringstream ss;
 
     for(; i < tam; i++){
         let = cadena[i];
@@ -87,17 +91,17 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             num *= 10;
             cont --;
         }
-        ss << int(num);//metiendo variable int en el objeto ss
-        str = ss.str();//pasando string a str
+        str = to_string(int(num));//pasar de float a int(para quitar los decimales), luego de int a string
 
         while(cont1 < 8){
-            str.insert(0, "0");//inserto en la primera posicion el caracter "0"
+            str = '0' + str;//inserto en la primera posicion el caracter "0"
             cont1 ++;
         }
-        escri[0] = escri[0].insert(8*i, str);
+        cout << "antes: " << escri[0] << endl;
+        escri[0] = escri[0] + str;
         cont = 0;
         num = 0;
-        ss.str("");//vaciando ss
+        cout << "despues: " << escri[0] << endl;
     }
 }
 
