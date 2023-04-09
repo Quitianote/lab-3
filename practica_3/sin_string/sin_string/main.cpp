@@ -83,17 +83,12 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             num = (num/float(10)) + resi/float(10);
             let /= 2;
             cont ++;
-
-            //cout << let << " numero pasandose a binario" << " ///numero: "<< num << endl;
-            cout << let << " numero pasandose a binario" << " ///numero: " << fixed << num << endl;
-
         }
         cont1 = cont;
 
         while(cont > 0){//pasando de decimal a binario
             num *= 10;
             cont --;
-            cout << " Pasando de decimal a binario: " << fixed << num << endl;
         }
         ss << int(num);
         str = ss.str();
@@ -103,45 +98,18 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             cont1 ++;
         }
         escri[0] = escri[0].insert(8*i, str);
-        //cadena[i] = num;
         cont = 0;
         num = 0;
         ss.str("");//vaciando ss
     }
 }
 
-void imprimir(int caracter[], int i){
-    int cont = 0;
-
-    for(; cont < i; cont ++){
-        cout << caracter[cont] << endl;
-    }
-}
-/*
-void arrstr(string str, int tam){//convirtiendo arreglo en un string
-    int i = 0;
-    int let = 0;
-    int pos = 1;
-    int elem = 0;
-    string cad = str;//copiando arreglo
-    for(; i < tam; i ++){
-        str[i] = "";
-        for(; let < 8; let ++){
-            str[i] = str[i].insert(pos, 1, cad[elem]);
-
-
-        }
-
-
-    }
-}
-*/
 void codi1(string escri[], int n, int tam){//metodo de codificacion 1
     int i = 0;
     int semi = n;//copia de semilla
     int noriginal = n;//copia de valor de semilla original
     string cop[1] = {escri[0]};//copia de string original
-    cout << "valor completo: " << escri[0] << endl;
+
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
         if(i == 0){//primer cambio de semilla
             cambit1(escri, n);
@@ -154,8 +122,6 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
             codi1cam(escri, cop, noriginal, i, i + n);//codificando la semilla n
             semi += n;
         }
-        cout << "i: " << i  << " n: " << n << endl;
-        cout << "valor antes de codi: " << escri[0] << endl;
     }
 }
 
@@ -177,7 +143,7 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     int cont = 1;
     int cont0 = 0;
     int cont1 = 0;
-    cout << "inicio: " << ini << " final: " << fin << endl;
+
     ini -= semi;//posicion de la semilla que se va a contar
     fin -= semi;//posicion final de la semilla que se va a contar
 
@@ -188,7 +154,6 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
 
     ini = inicop;//dandole al valor inicial su valor inicial original
     fin = fincop;//dandole al valor final su valor final original
-    cout << "valor 1: " << cad[0] << endl;
 
     if(cont1 == cont0){//primera condicion
         for(; ini < fin; ini ++){
@@ -202,7 +167,7 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
             }
         }
     }
-    cout << "valor 2: " << cad[0] << endl;
+
     if(cont0 > cont1){//segunda condicion
         for(; ini < fin; ini ++){
             if(cont%2 == 0){
@@ -218,8 +183,6 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
             cont ++;
         }
     }
-    cout << "valor 3: " << cad[0] << endl;
-    cout << "contador: " << cont << endl;
 
     if(cont1 > cont0){//tercera condicion
         for(; ini < fin; ini ++){
@@ -236,14 +199,13 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
             cont ++;
         }
     }
-    cout << "valor 4: " << cad[0] << endl;
 }
 
 void codi2(string escri[], int n, int tam){
     int i = 0;
     int semi = n;//copia de semilla
     string cop[1] = {escri[0]};//copia de string original
-    cout << "valor completo: " << escri[0] << endl;
+
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
         if(i == semi || i == 0){//verificando si i es igual a la semilla
             if(i + n > tam*8){//mirando si i + n(o sea la variable final) se pasa del rango, se multiplica por 8 a tam, porque son 8 bits
@@ -251,24 +213,18 @@ void codi2(string escri[], int n, int tam){
             }
             codi2cam(escri, cop, i, i + n);//codificando la semilla n
             if(i != 0)semi += n;
-
-            cout << "i: " << i  << " n: " << n << endl;
-            cout << "valor antes de codi: " << escri[0] << endl;
         }
     }
 }
 
 void codi2cam(string cad[], string cop[], int ini, int fin){
-    cout << "inicio: " << ini << " final: " << fin << endl;
-    cout << "intercambiando original: " << cad[0] << endl;
     cad[0][ini] = cop[0][fin - 1];//la posicion final darle la posicion inicial
-    cout << "intercambiando 1: " << cad[0] << endl;
 
     for(; ini < fin - 1; ini ++){//intercambiar posiciones
         cad[0][ini+1] = cop[0][ini];
-        cout << "intercambiando: " << cad[0] << endl;
     }
 }
+
 
 
 
