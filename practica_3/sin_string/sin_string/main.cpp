@@ -9,6 +9,7 @@ void imprimir(int*, int);
 void codi1(string* , int, int);
 void codi1cam(string* , string*, int, int, int);
 void codi2(string* , int, int);
+void codi2cam(string* , string*, int, int);
 void cambit1(string*, int);
 
 int main(){
@@ -51,7 +52,7 @@ int main(){
     imprimir(caracter, i);
 
     if(codi == 1)codi1(escri, n, i);
-    //else codi2(escri, n, i);
+    else codi2(escri, n, i);
 
     binario << escri[0];//escribir en archivo bin
 
@@ -176,7 +177,7 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     int cont = 1;
     int cont0 = 0;
     int cont1 = 0;
-
+    cout << "inicio: " << ini << " final: " << fin << endl;
     ini -= semi;//posicion de la semilla que se va a contar
     fin -= semi;//posicion final de la semilla que se va a contar
 
@@ -237,14 +238,38 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
     }
     cout << "valor 4: " << cad[0] << endl;
 }
-/*
-void codi2(string escri[], int n, tam){
 
+void codi2(string escri[], int n, int tam){
+    int i = 0;
+    int semi = n;//copia de semilla
+    string cop[1] = {escri[0]};//copia de string original
+    cout << "valor completo: " << escri[0] << endl;
+    for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
+        if(i == semi || i == 0){//verificando si i es igual a la semilla
+            if(i + n > tam*8){//mirando si i + n(o sea la variable final) se pasa del rango, se multiplica por 8 a tam, porque son 8 bits
+                n = tam*8 - i;
+            }
+            codi2cam(escri, cop, i, i + n);//codificando la semilla n
+            if(i != 0)semi += n;
 
-
-
+            cout << "i: " << i  << " n: " << n << endl;
+            cout << "valor antes de codi: " << escri[0] << endl;
+        }
+    }
 }
-*/
+
+void codi2cam(string cad[], string cop[], int ini, int fin){
+    cout << "inicio: " << ini << " final: " << fin << endl;
+    cout << "intercambiando original: " << cad[0] << endl;
+    cad[0][ini] = cop[0][fin - 1];//la posicion final darle la posicion inicial
+    cout << "intercambiando 1: " << cad[0] << endl;
+
+    for(; ini < fin - 1; ini ++){//intercambiar posiciones
+        cad[0][ini+1] = cop[0][ini];
+        cout << "intercambiando: " << cad[0] << endl;
+    }
+}
+
 
 
 
