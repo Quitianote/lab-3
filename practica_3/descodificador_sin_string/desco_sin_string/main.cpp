@@ -18,6 +18,7 @@ int main(){
     int n = 0;
     int cont = 0;
     int codi = 0;
+    int contdef = 0;
     char byte;
     char nom[60] = "";
     char bin[60] = "";
@@ -42,19 +43,23 @@ int main(){
     while(binario.read(&byte, 1)) {
         cade[0] = cade[0].insert(cont, 1, byte);
         cont ++;
+        if(cont%8 == 0)contdef ++;
     }
     cont /= 2;
 
     cout << cade[0] << endl;
 
-    codi1(cade, n, cont);
-    int numeros[cont];//arreglo con numeros
+    codi1(cade, n, contdef);
+    int numeros[contdef];//arreglo con numeros
     cout << cade[0] << endl;
-    conv(cade, numeros, cont);
-    for(int i = 0; i < cont; i ++){
+    conv(cade, numeros, contdef);
+    for(int i = 0; i < contdef; i ++){
         cout << numeros[i] << endl;
-
     }
+    for(int i = 0; i < contdef; i ++){
+        texto << char(numeros[i]);
+    }
+
     texto.close();
     binario.close();
 
