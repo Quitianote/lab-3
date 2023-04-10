@@ -129,6 +129,7 @@ void cambit1(string escri[], int n){//primer cambio de bit codi1
 
     for(; i < n; i ++){
         bit = escri[0][i];
+
         if(bit == '1')escri[0][i] = '0';
         else escri[0][i] = '1';
     }

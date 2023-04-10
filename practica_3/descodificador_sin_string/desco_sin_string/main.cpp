@@ -50,6 +50,7 @@ int main(){
 
     int numeros[contdef];//arreglo con numeros
 
+    cout <<  cade[0] << " antes de conv,cad" << endl;
     conv(cade, numeros, contdef);
 
     for(int i = 0; i < contdef; i ++){
@@ -78,25 +79,16 @@ void conv(string cad[], int numeros[], int tam){
     string bytes = "";
 
     for(; reco < tam; reco ++){//recorriendo bytes
-        cout <<  "aqui 1" << endl;
-        while(ini < final){
-            cout <<  "en bytes" << endl;
-            cout <<  "ini: " << ini << " final: " << final << endl;
-            bytes.insert(pos, 1, cad[0][ini]);
+        while(ini < final){//creando byte
+            bytes.insert(pos, 1, cad[0][ini]);//creando byte, bit por bit, insertando cada bit al final de anterior bit
             ini ++;
             pos ++;
-            cout << bytes << endl;
-            cout <<  "bytes final" << endl;
         }
         for(; i > -1; i --){//recorriendo bits
             if(bytes[i] == '1'){//mirando si el bit es 1 pa elevarlo
-                cout << "byte: " << bytes[i] << endl;
                 if(i != 7){
-                    cout << "i: " << i << endl;
-                    cout << "expo: " << expo << endl;
                     for(; mul < expo; mul ++){//elevando numero
                         resul *= 2;//se multiplica por 2 dependiendo de que tan grande es i
-                        cout << "resul: " << resul << " mul: " << mul << endl;
                     }
                     num += resul;
                 }
@@ -106,7 +98,6 @@ void conv(string cad[], int numeros[], int tam){
             expo ++;
             mul = 0;
             resul = 1;
-            cout <<  "num: " << num << endl;
         }
         i = 7;
         numeros[reco] = num;
@@ -116,7 +107,6 @@ void conv(string cad[], int numeros[], int tam){
         bytes = "";
         pos = 0;
         expo = 0;
-        cout <<  "aqui 2" << endl;
     }
 }
 
@@ -144,10 +134,11 @@ void codi1(string escri[], int n, int tam){//metodo de descodificacion 1
 
 void cambit1(string escri[], int n){//primer cambio de bit codi1
     int i = 0;
-    int bit = 0;
+    char bit = '\0';
 
     for(; i < n; i ++){
         bit = escri[0][i];
+
         if(bit == '1')escri[0][i] = '0';
         else escri[0][i] = '1';
     }
