@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void separar(string cade[], string datos[256][3] , int nom, int tam);
+void separar(string cade[], string datos[256][4] , int nom, int tam);
 void codi2(string escri[], int n, int tam);
 void codi2cam(string cad[], string cop[], int ini, int fin);
 void conv(string cad[], int numeros[], int tam);
@@ -58,7 +58,7 @@ int main(){
         for(i = 0; i < tam;i ++){//contar cuantos usuarios hay
             if(caracter[0][i] == '!' || caracter[0][i] == '*')contnom ++;
         }
-        string datos[contnom][3];
+        string datos[contnom][4];
         cout << "pase por aca 2.55555555" << endl;
         separar(caracter, datos, contnom, tam);//separando datos
         cout << "pase por aca 2" << endl;
@@ -120,21 +120,23 @@ void codi2cam(string cad[], string cop[], int ini, int fin){
 }
 
 
-void separar(string cade[], string datos[][3], int nom, int tam){
+void separar(string cade[], string datos[][4], int nom, int tam){
     int i = 0;
     int fila = 0;
     int elem = 0;
     cout << "pase por aca 4" << endl;
     cout << "nom: " << nom << " tam: " << tam << endl;
 
-    for(; fila < nom; fila ++){//recorriendo filas de datos
+    //for(; fila < nom; fila ++){//recorriendo filas de datos
         for(; i < tam; i ++){//recorriendo caracteres de cade, para encontrar inicio de usuario
-            if(cade[i] == "!" || cade[i] == "*"){
-                datos[fila][0] = cade[i];
+            char cara = cade[0][i];
+            if(cara == '!' || cara == '*'){
+                datos[fila][0] = cade[0][i];
                 elem = i + 1;
+                cout << "mirando inicio de usuario: " << datos[fila][0] << endl;
                 for(;;elem ++){//construyendo string nombre
-                    if(cade[elem] != ";"){
-                        datos[fila][1] = datos[fila][1] + cade[elem];
+                    if(cade[0][elem] != ';'){
+                        datos[fila][1] = datos[fila][1] + cade[0][elem];
                     }
                     else{
                         elem ++;
@@ -142,8 +144,8 @@ void separar(string cade[], string datos[][3], int nom, int tam){
                     }
                 }
                 for(;;elem ++){//construyendo string contraseña
-                    if(cade[elem] != ","){
-                        datos[fila][2] = datos[fila][2] + cade[elem];
+                    if(cade[0][elem] != ','){
+                        datos[fila][2] = datos[fila][2] + cade[0][elem];
                     }
                     else{
                         elem ++;
@@ -151,14 +153,16 @@ void separar(string cade[], string datos[][3], int nom, int tam){
                     }
                 }
                 for(;;elem ++){//construyendo string dinero
-                    if(cade[elem] != "/"){
-                        datos[fila][3] = datos[fila][3] + cade[elem];
+                    if(cade[0][elem] != '/'){
+                        datos[fila][3] = datos[fila][3] + cade[0][elem];
                     }
                     else break;
                 }
+                fila ++;
             }
         }
-    }
+    //}
+    cout << "pase por aca 5" << endl;
     for(i = 0; i < 2; i ++){
         for(int col = 0; col < 3; col ++){
             cout << datos[i][col] << endl;
