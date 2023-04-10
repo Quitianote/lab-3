@@ -2,56 +2,62 @@
 #include <fstream>
 #include <sstream>
 
+
 using namespace std;
 
-void conv(int*, int, string*);
+void conv(string*, int*, int);
 void codi1(string* , int, int);
-void codi1cam(string* , string*, int, int, int);
-void codi2(string* , int, int);
-void codi2cam(string* , string*, int, int);
+void codi1cam(string*, string*, int, int, int);
+void codi2(string*, int , int);
+void codi2cam(string*, string*, int, int);
 void cambit1(string*, int);
 
 int main(){
-    ifstream texto;
-    ofstream binario;
-    int i = 0;
+    ofstream texto;
+    ifstream binario;
     int n = 0;
+    int cont = 0;
     int codi = 0;
+    int contdef = 0;
+    char byte;
     char nom[60] = "";
     char bin[60] = "";
-    int caracter[256];
-    string escri[1];
+    string cade[1];
 
     cout << "Ingrese nombre del archivo: "; cin >> nom;
     cout << "Ingrese nombre del archivo binario: "; cin >> bin;
     cout << "Ingrese semilla: "; cin >> n;
-    cout << "Ingrese metodo de codificacion: "; cin >> codi;
+    cout << "Ingrese metodo de decodificacion: "; cin >> codi;
+
     while(codi != 1 && codi != 2){
         cout << "//ERROR//::Ingrese metodo de codificacion 1 o 2: "; cin >> codi;
     }
     texto.open(nom);
-    binario.open(bin, ofstream::binary);
+    binario.open(bin, ifstream::binary);
 
     if(texto.is_open())cout << "Esta abierto texto" << endl;
     else cout << "Esta cerrado texto" << endl;
     if(binario.is_open())cout << "Esta abierto binario" << endl;
     else cout << "Esta cerrado binario" << endl;
 
-    while(texto.good()){//leer texto y pasar a entero
-        char temp = texto.get();
-
-        if((temp - 0) != (-1)){
-            caracter[i] = (temp - 0);
-            i ++;
-        }
-
+    while(binario.read(&byte, 1)) {//leyendo bits
+        cade[0] = cade[0].insert(cont, 1, byte);
+        cont ++;
+        if(cont%8 == 0)contdef ++;//definiendo tamaño
     }
-    conv(caracter, i, escri);
+    if(codi == 1)codi1(cade, n, contdef);//decodificacion 1
+    else codi2(cade, n, contdef);
 
-    if(codi == 1)codi1(escri, n, i);//codificar
-    else codi2(escri, n, i);
+    int numeros[contdef];//arreglo con numeros
 
-    binario << escri[0];//escribir en archivo bin
+    conv(cade, numeros, contdef);
+
+    for(int i = 0; i < contdef; i ++){
+        cout << numeros[i] << endl;
+    }
+    for(int i = 0; i < contdef; i ++){
+        texto << char(numeros[i]);
+    }
 
     texto.close();
     binario.close();
@@ -59,53 +65,65 @@ int main(){
     return 0;
 }
 
-void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
-    double num = 0;
-    float resi = 0;
-    int cont = 0;
-    int cont1 = 0;
-    int let = 0;
-    int divi = 0;
-    int i = 0;
-    string str;
-    stringstream ss;
+void conv(string cad[], int numeros[], int tam){
+    int reco = 0;
+    int ini = 0;
+    int final = 8;
+    int i = 7;
+    int num = 0;
+    int mul = 0;
+    int resul = 1;
+    int expo = 0;
+    int pos = 0;
+    string bytes = "";
 
-    for(; i < tam; i++){
-        let = cadena[i];
-        divi = let/2;
-
-        while(divi != (1/2)){//mientras la division sea diferente a la ultima division que se hace, o sea la ultima division que se hace es dividir por 1
-            divi = let/2;
-            resi = float(let%2);
-            num = (num/float(10)) + resi/float(10);
-            let /= 2;
-            cont ++;
+    for(; reco < tam; reco ++){//recorriendo bytes
+        cout <<  "aqui 1" << endl;
+        while(ini < final){
+            cout <<  "en bytes" << endl;
+            cout <<  "ini: " << ini << " final: " << final << endl;
+            bytes.insert(pos, 1, cad[0][ini]);
+            ini ++;
+            pos ++;
+            cout << bytes << endl;
+            cout <<  "bytes final" << endl;
         }
-        cont1 = cont;
+        for(; i > -1; i --){//recorriendo bits
+            if(bytes[i] == '1'){//mirando si el bit es 1 pa elevarlo
+                cout << "byte: " << bytes[i] << endl;
+                if(i != 7){
+                    cout << "i: " << i << endl;
+                    cout << "expo: " << expo << endl;
+                    for(; mul < expo; mul ++){//elevando numero
+                        resul *= 2;//se multiplica por 2 dependiendo de que tan grande es i
+                        cout << "resul: " << resul << " mul: " << mul << endl;
+                    }
+                    num += resul;
+                }
+                else num ++;
 
-        while(cont > 0){//pasando de decimal a binario
-            num *= 10;
-            cont --;
+            }
+            expo ++;
+            mul = 0;
+            resul = 1;
+            cout <<  "num: " << num << endl;
         }
-        ss << int(num);//metiendo variable int en el objeto ss
-        str = ss.str();//pasando string a str
-
-        while(cont1 < 8){
-            str.insert(0, "0");//inserto en la primera posicion el caracter "0"
-            cont1 ++;
-        }
-        escri[0] = escri[0].insert(8*i, str);
-        cont = 0;
+        i = 7;
+        numeros[reco] = num;
+        ini = final;
+        final += 8;
         num = 0;
-        ss.str("");//vaciando ss
+        bytes = "";
+        pos = 0;
+        expo = 0;
+        cout <<  "aqui 2" << endl;
     }
 }
 
-void codi1(string escri[], int n, int tam){//metodo de codificacion 1
+void codi1(string escri[], int n, int tam){//metodo de descodificacion 1
     int i = 0;
     int semi = n;//copia de semilla
     int noriginal = n;//copia de valor de semilla original
-    string cop[1] = {escri[0]};//copia de string original
 
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
         if(i == 0){//primer cambio de semilla
@@ -116,6 +134,7 @@ void codi1(string escri[], int n, int tam){//metodo de codificacion 1
             if(i + n > tam*8){//mirando si i + n(o sea la variable final) se pasa del rango
                 n = tam*8 - i;
             }
+            string cop[1] = {escri[0]};//copia de string original
             codi1cam(escri, cop, noriginal, i, i + n);//codificando la semilla n
             semi += n;
         }
@@ -215,12 +234,14 @@ void codi2(string escri[], int n, int tam){
 }
 
 void codi2cam(string cad[], string cop[], int ini, int fin){
-    cad[0][ini] = cop[0][fin - 1];//la posicion final darle la posicion inicial
+    cad[0][fin - 1] = cop[0][ini];//la posicion inicial darle la posicion final
 
     for(; ini < fin - 1; ini ++){//intercambiar posiciones
-        cad[0][ini+1] = cop[0][ini];
+        cad[0][ini] = cop[0][ini + 1];
     }
 }
+
+
 
 
 

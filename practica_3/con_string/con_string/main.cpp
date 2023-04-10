@@ -8,7 +8,7 @@ void conv(int*, int, string*);
 void codi1(string* , int, int);
 void codi1cam(string* , string*, int, int, int);
 void codi2(string* , int, int);
-void codi2cam(string* , string*, int, int);
+void codi2cam(string* , string*, int, int, int);
 void cambit1(string*, int);
 
 int main(){
@@ -48,15 +48,10 @@ int main(){
     }
     conv(caracter, i, escri);
 
-    cout << "valor inicial: " << escri[0] << endl;
-    cout << "i: " << i << endl;
-
     if(codi == 1)codi1(escri, n, i);
     else codi2(escri, n, i);
-    cout << "i: " << i << endl;
-    binario << escri[0];//escribir en archivo bin
 
-    cout << "valor final: " << escri[0] << endl;
+    binario << escri[0];//escribir en archivo bin
 
     texto.close();
     binario.close();
@@ -91,12 +86,9 @@ void conv(int cadena[], int tam, string escri[]){//pasar de numero a binario
             str = '0' + str;//inserto en la primera posicion el caracter "0"
             cont1 ++;
         }
-        cout << "str: " << str << endl;
-        cout << "antes: " << escri[0] << endl;
         escri[0] = escri[0] + str;
         cont = 0;
         str = "";
-        cout << "despues: " << escri[0] << endl;
     }
 }
 
@@ -137,15 +129,19 @@ void cambit1(string escri[], int n){//primer cambio de bit codi1
 
 void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codificacion 1
     int inicop = ini;//copia de valor inicial
+    int fincop = fin;
     int cont = 1;
     int cont0 = 0;
     int cont1 = 0;
-    string strcop = cop[0].substr(ini, semi);//copia con la subcadena del string que voy a contar
+    string strcop = cop[0].substr(ini - semi, semi);//copia con la subcadena del string que voy a contar
     string str = cad[0].substr(ini, semi);//string a cambiar
     cad[0].erase(ini, semi);
-    ini -= semi;//posicion de la semilla que se va a contar
     ini = 0;//dandole al valor inicial su valor inicial original
     fin = semi;//dandole al valor final su valor final original
+    if(fincop - inicop != semi){
+        fin = fincop - inicop;
+    }
+
 
     for(; ini < fin; ini ++){//contando 0 y 1
         if(strcop[ini] == '0')cont0 ++;
@@ -197,12 +193,13 @@ void codi1cam(string cad[], string cop[], int semi, int ini, int fin){//codifica
             cont ++;
         }
     }
-    cad[0].insert(inicop,str);
+    cad[0].insert(inicop, str);
 }
 
 void codi2(string escri[], int n, int tam){
     int i = 0;
     int semi = n;//copia de semilla
+    int nori = n;//semilla original copia
     string cop[1] = {escri[0]};//copia de string original
 
     for(; i < tam*8; i ++){//entrando bit por bit, tam*8 es igual a la cantidad de bits, ya que tam son los bytes
@@ -210,21 +207,25 @@ void codi2(string escri[], int n, int tam){
             if(i + n > tam*8){//mirando si i + n(o sea la variable final) se pasa del rango, se multiplica por 8 a tam, porque son 8 bits
                 n = tam*8 - i;
             }
-            codi2cam(escri, cop, i, i + n);//codificando la semilla n
+            codi2cam(escri, cop, i, i + n, nori);//codificando la semilla n
             if(i != 0)semi += n;
         }
     }
 }
 
-void codi2cam(string cad[], string cop[], int ini, int fin){
-    cad[0][ini] = cop[0][fin - 1];//la posicion final darle la posicion inicial
+void codi2cam(string cad[], string cop[], int ini, int fin, int semi){
     string strcop = cop[0].substr(ini, semi);
     string str = cad[0].substr(ini, semi);//string a cambiar
     cad[0].erase(ini, semi);
+    int inicop = ini;
+    ini = 0;
+    fin = semi;
+    str[0] = strcop.back();//la posicion inicial darle la posicion final
 
     for(; ini < fin - 1; ini ++){//intercambiar posiciones
-        cad[0][ini+1] = cop[0][ini];
+        str[ini+1] = strcop[ini];
     }
+    cad[0].insert(inicop, str);
 }
 
 
